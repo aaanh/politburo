@@ -34,7 +34,7 @@ interface PositionsContextType {
   setIsAssignDialogOpen: (open: boolean) => void;
   setSelectedPosition: (position: Position | null) => void;
   handleCreate: (parentId?: number) => Promise<void>;
-  handleEdit: () => Promise<void>;
+  handleEdit: (parentId?: number) => Promise<void>;
   handleDelete: () => Promise<void>;
   handleAddChild: (parentId: number, childId: number) => Promise<void>;
   handleAssign: (positionId: number, personId: number) => Promise<void>;
@@ -81,7 +81,7 @@ export function PositionsProvider({ children, initialPositions }: PositionsProvi
     }
   };
 
-  const handleEdit = async () => {
+  const handleEdit = async (parentId?: number) => {
     if (selectedPosition && newTitle.trim()) {
       const result = await updatePosition(selectedPosition.id, newTitle.trim());
       if (result.success && result.data) {
