@@ -8,13 +8,16 @@ import {
   updatePosition,
   deletePosition,
   addChildPosition,
-} from "./actions";
+  assignPerson,
+  unassignPerson,
+} from "../actions";
 
 interface Position {
   id: number;
   title: string;
   order: number;
   children?: Position[];
+  assignedPeople?: { id: number; name: string }[];
 }
 
 interface PositionsContextType {
@@ -22,16 +25,20 @@ interface PositionsContextType {
   setPositions: (positions: Position[]) => void;
   isCreateDialogOpen: boolean;
   isEditDialogOpen: boolean;
+  isAssignDialogOpen: boolean;
   selectedPosition: Position | null;
   newTitle: string;
   setNewTitle: (title: string) => void;
   setIsCreateDialogOpen: (open: boolean) => void;
   setIsEditDialogOpen: (open: boolean) => void;
+  setIsAssignDialogOpen: (open: boolean) => void;
   setSelectedPosition: (position: Position | null) => void;
   handleCreate: (parentId?: number) => Promise<void>;
   handleEdit: (parentId?: number) => Promise<void>;
   handleDelete: (id: number) => Promise<void>;
   handleAddChild: (parentId: number, childId: number) => Promise<void>;
+  handleAssign: (positionId: number, personId: number) => Promise<void>;
+  handleUnassign: (positionId: number, personId: number) => Promise<void>;
 }
 
 const PositionsContext = createContext<PositionsContextType | undefined>(undefined);
@@ -45,6 +52,7 @@ export function PositionsProvider({ children, initialPositions }: PositionsProvi
   const [positions, setPositions] = useState<Position[]>(initialPositions);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
   const [newTitle, setNewTitle] = useState("");
 
@@ -220,6 +228,20 @@ export function PositionsProvider({ children, initialPositions }: PositionsProvi
     }
   };
 
+  const handleAssign = async (positionId: number, personId: number) => {
+    const result = await assignPerson(positionId, personId);
+    if (result.success) {
+      await loadPositions();
+    }
+  };
+
+  const handleUnassign = async (positionId: number, personId: number) => {
+    const result = await unassignPerson(positionId, personId);
+    if (result.success) {
+      await loadPositions();
+    }
+  };
+
   return (
     <PositionsContext.Provider
       value={{
@@ -227,16 +249,20 @@ export function PositionsProvider({ children, initialPositions }: PositionsProvi
         setPositions,
         isCreateDialogOpen,
         isEditDialogOpen,
+        isAssignDialogOpen,
         selectedPosition,
         newTitle,
         setNewTitle,
         setIsCreateDialogOpen,
         setIsEditDialogOpen,
+        setIsAssignDialogOpen,
         setSelectedPosition,
         handleCreate,
         handleEdit,
         handleDelete,
         handleAddChild,
+        handleAssign,
+        handleUnassign,
       }}
     >
       {children}

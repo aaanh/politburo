@@ -8,6 +8,13 @@
       "when": 1744861431209,
       "tag": "0000_tough_riptide",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1744911378164,
+      "tag": "0001_stale_menace",
+      "breakpoints": true
     }
   ]
 }

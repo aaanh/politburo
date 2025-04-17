@@ -1,5 +1,5 @@
 import { db } from "../db/drizzle";
-import { governmentPositions, governmentPositionHierarchy } from "../db/schema";
+import { governmentPositions, governmentPositionHierarchy, positionAssignments, people } from "../db/schema";
 import { eq, and, or, sql } from "drizzle-orm";
 
 export class PositionService {
@@ -212,5 +212,101 @@ export class PositionService {
           sql`${governmentPositionHierarchy.depth} > 0`
         )
       );
+  }
+
+  async assignPerson(positionId: number, personId: number) {
+    const [assignment] = await this.#db
+      .insert(positionAssignments)
+      .values({
+        positionId,
+        personId,
+        startDate: new Date(),
+      })
+      .returning();
+    return assignment;
+  }
+
+  async unassignPerson(positionId: number, personId: number) {
+    const [assignment] = await this.#db
+      .update(positionAssignments)
+      .set({
+        endDate: new Date(),
+      })
+      .where(
+        and(
+          eq(positionAssignments.positionId, positionId),
+          eq(positionAssignments.personId, personId),
+          sql`${positionAssignments.endDate} IS NULL`
+        )
+      )
+      .returning();
+    return assignment;
+  }
+
+  async getPositionWithPeople(id: number) {
+    const position = await this.read(id);
+    if (!position) return null;
+
+    const assignments = await this.#db
+      .select({
+        id: people.id,
+        name: people.name,
+      })
+      .from(positionAssignments)
+      .innerJoin(people, eq(positionAssignments.personId, people.id))
+      .where(
+        and(
+          eq(positionAssignments.positionId, id),
+          sql`${positionAssignments.endDate} IS NULL`
+        )
+      );
+
+    return {
+      ...position,
+      assignedPeople: assignments,
+    };
+  }
+
+  async getAllPositionsWithPeople() {
+    const positions = await this.readAll();
+    const hierarchies = await this.#db
+      .select()
+      .from(governmentPositionHierarchy)
+      .where(eq(governmentPositionHierarchy.depth, 1));
+
+    const assignments = await this.#db
+      .select({
+        positionId: positionAssignments.positionId,
+        personId: people.id,
+        name: people.name,
+      })
+      .from(positionAssignments)
+      .innerJoin(people, eq(positionAssignments.personId, people.id))
+      .where(sql`${positionAssignments.endDate} IS NULL`);
+
+    // Transform flat positions into a tree structure
+    const positionMap = new Map<number, any>(
+      positions.map(pos => [pos.id, { 
+        ...pos, 
+        order: pos.id, 
+        children: [],
+        assignedPeople: assignments
+          .filter(a => a.positionId === pos.id)
+          .map(a => ({ id: a.personId, name: a.name }))
+      }])
+    );
+    
+    hierarchies.forEach(hierarchy => {
+      const parent = positionMap.get(hierarchy.ancestorId!);
+      const child = positionMap.get(hierarchy.descendantId!);
+      if (parent && child) {
+        parent.children.push(child);
+      }
+    });
+
+    // Get root positions (those without parents)
+    return positions
+      .filter(pos => !hierarchies.some(h => h.descendantId === pos.id))
+      .map(pos => positionMap.get(pos.id)!);
   }
 }

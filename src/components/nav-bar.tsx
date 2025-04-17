@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { BoltIcon, HomeIcon } from "lucide-react";
+import { BoltIcon, HomeIcon, InfoIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { buttonVariants } from "./ui/button";
@@ -15,6 +15,11 @@ const navTargets = [
     label: "Admin",
     icon: <BoltIcon />
   },
+  {
+    href: "/about",
+    label: "About",
+    icon: <InfoIcon />
+  }
 ]
 
 export default function NavBar() {

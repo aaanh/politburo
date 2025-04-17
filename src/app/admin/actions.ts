@@ -1,9 +1,11 @@
 "use server";
 
 import { PositionService } from "@/services/position-service";
+import { PeopleService } from "@/services/people-service";
 import { revalidatePath } from "next/cache";
 
 const positionService = PositionService.getInstance();
+const peopleService = PeopleService.getInstance();
 
 export async function createPosition(title: string, parentId?: number) {
   try {
@@ -26,7 +28,7 @@ export async function getPosition(id: number) {
 
 export async function getAllPositions() {
   try {
-    const result = await positionService.readAll();
+    const result = await positionService.getAllPositionsWithPeople();
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: "Failed to get positions" };
@@ -77,5 +79,73 @@ export async function addChildPosition(parentId: number, childId: number) {
     return { success: true };
   } catch (error) {
     return { success: false, error: "Failed to add child position" };
+  }
+}
+
+export async function createPerson(name: string) {
+  try {
+    const result = await peopleService.create(name);
+    revalidatePath("/admin");
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, error: "Failed to create person" };
+  }
+}
+
+export async function getPerson(id: number) {
+  try {
+    const result = await peopleService.read(id);
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, error: "Failed to get person" };
+  }
+}
+
+export async function getAllPeople() {
+  try {
+    const result = await peopleService.readAll();
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, error: "Failed to get people" };
+  }
+}
+
+export async function updatePerson(id: number, name: string) {
+  try {
+    const result = await peopleService.update(id, name);
+    revalidatePath("/admin");
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, error: "Failed to update person" };
+  }
+}
+
+export async function deletePerson(id: number) {
+  try {
+    const result = await peopleService.delete(id);
+    revalidatePath("/admin");
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, error: "Failed to delete person" };
+  }
+}
+
+export async function assignPerson(positionId: number, personId: number) {
+  try {
+    const result = await positionService.assignPerson(positionId, personId);
+    revalidatePath("/admin");
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, error: "Failed to assign person" };
+  }
+}
+
+export async function unassignPerson(positionId: number, personId: number) {
+  try {
+    const result = await positionService.unassignPerson(positionId, personId);
+    revalidatePath("/admin");
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, error: "Failed to unassign person" };
   }
 }
