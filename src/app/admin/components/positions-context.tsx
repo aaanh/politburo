@@ -33,7 +33,7 @@ interface PositionsContextType {
   setIsEditDialogOpen: (open: boolean) => void;
   setIsAssignDialogOpen: (open: boolean) => void;
   setSelectedPosition: (position: Position | null) => void;
-  handleCreate: () => Promise<void>;
+  handleCreate: (parentId?: number) => Promise<void>;
   handleEdit: () => Promise<void>;
   handleDelete: () => Promise<void>;
   handleAddChild: (parentId: number, childId: number) => Promise<void>;
@@ -56,9 +56,9 @@ export function PositionsProvider({ children, initialPositions }: PositionsProvi
   const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
   const [newTitle, setNewTitle] = useState("");
 
-  const handleCreate = async () => {
+  const handleCreate = async (parentId?: number) => {
     if (newTitle.trim()) {
-      const result = await createPosition(newTitle.trim(), selectedPosition?.id);
+      const result = await createPosition(newTitle.trim(), parentId);
       if (result.success && result.data) {
         const newPosition: Position = {
           ...result.data,
@@ -66,9 +66,9 @@ export function PositionsProvider({ children, initialPositions }: PositionsProvi
           children: [],
           assignedPeople: []
         };
-        if (selectedPosition) {
+        if (parentId) {
           setPositions(prev => prev.map(pos =>
-            pos.id === selectedPosition.id
+            pos.id === parentId
               ? { ...pos, children: [...(pos.children || []), newPosition] }
               : pos
           ));
