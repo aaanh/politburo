@@ -7,10 +7,9 @@ import { CreatePositionDialog } from "./create-position-dialog";
 import { EditPositionDialog } from "./edit-position-dialog";
 
 interface AdminClientProps {
-  initialPositions: Position[];
 }
 
-export default function AdminClient({ initialPositions }: AdminClientProps) {
+export default function AdminClient() {
   const {
     positions,
     isCreateDialogOpen,
