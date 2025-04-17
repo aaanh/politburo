@@ -10,7 +10,7 @@ export default async function AdminPage() {
 
   return (
     <PositionsProvider initialPositions={positions}>
-      <AdminClient initialPositions={positions} />
+      <AdminClient />
     </PositionsProvider>
   );
 }
