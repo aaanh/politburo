@@ -1,6 +1,6 @@
 import { getAllPositions } from "../actions";
-import AdminClient from "./admin-client";
-import { PositionsProvider } from "./positions-context";
+import AdminClient from "./components/admin-client";
+import { PositionsProvider } from "./components/positions-context";
 
 export default async function AdminPage() {
   const result = await getAllPositions();
