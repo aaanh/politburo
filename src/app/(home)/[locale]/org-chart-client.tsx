@@ -1,6 +1,7 @@
 "use client";
 
 import { OrgChart, Position } from "@/components/org-chart";
+import { useI18n } from "@/contexts/i18n-context";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -34,11 +35,13 @@ export default function OrgChartClient({
     });
   };
 
+  const { t } = useI18n();
+
   return (
     <div className="mx-auto px-4 py-10 container">
       <div className="flex flex-wrap items-center gap-4 mb-6 p-2 w-fit">
         <h1 className="font-extralight text-3xl">
-          Government of the Socialist Republic of Vietnam
+          {t("government-of-the-socialist-republic-of-vietnam")}
         </h1>
 
         <svg

@@ -3,6 +3,7 @@
 import { Position } from "@/components/position-node";
 import I18nProvider from "@/contexts/i18n-context";
 import OrgChartClient from "./org-chart-client";
+import Footer from "@/components/footer";
 
 interface HomeContainerProps {
   locale: string;
@@ -18,6 +19,9 @@ export default function HomeContainer({
   return (
     <I18nProvider locale={locale} namespaces={i18nNamespaces}>
       <OrgChartClient initialPositions={positions} />
+      <div className="mx-auto my-4 p-4 container">
+        <Footer />
+      </div>
     </I18nProvider>
   );
 }
