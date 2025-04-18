@@ -1,16 +1,20 @@
-import { getAllPositions } from "../actions";
-import AdminClient from "./components/admin-client";
-import { PositionsProvider } from "./components/positions-context";
+import { getAllPositions } from "./actions";
 
-export default async function AdminPage() {
+import { PositionsProvider } from "@/contexts/positions-context";
+import AdminContainer from "./components/admin-container";
+
+export default async function AdminPage({ params }: { params: Promise<{ locale: string }> }) {
   const result = await getAllPositions();
   const positions = result.success
     ? (result.data || []).map((pos, index) => ({ ...pos, order: index }))
     : [];
 
+  const resolvedLocale =
+    typeof (await params).locale === "string" ? (await params).locale : "en";
+
   return (
     <PositionsProvider initialPositions={positions}>
-      <AdminClient />
+      <AdminContainer locale={resolvedLocale} i18nNamespaces={["default"]} />
     </PositionsProvider>
   );
 }

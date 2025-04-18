@@ -1,4 +1,4 @@
-import { PositionService } from "../services/position-service";
+import { PositionService } from "@/services/position-service";
 
 interface Position {
   id: number;
@@ -18,4 +18,4 @@ export async function getAllPositions() {
     console.error("Error fetching positions:", error);
     return { success: false, error: "Failed to fetch positions" };
   }
-} 
+}
