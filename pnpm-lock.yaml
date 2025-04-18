@@ -11,6 +11,9 @@ importers:
       '@hello-pangea/dnd':
         specifier: ^18.0.1
         version: 18.0.1(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@icons-pack/react-simple-icons':
+        specifier: ^12.6.0
+        version: 12.6.0(react@19.1.0)
       '@neondatabase/serverless':
         specifier: ^1.0.0
         version: 1.0.0
@@ -450,6 +453,11 @@ packages:
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
+
+  '@icons-pack/react-simple-icons@12.6.0':
+    resolution: {integrity: sha512-CQJbCvJHn1GpnyJQrkXNVXSS5ct/MPzcmr2m8HUe7gCHUVG7Hl2PwrIIAvCcJ5hZ+3CAYi4WoWERoFj8DzGl/A==}
+    peerDependencies:
+      react: ^16.13 || ^17 || ^18 || ^19
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -1917,6 +1925,10 @@ snapshots:
       redux: 5.0.1
     transitivePeerDependencies:
       - '@types/react'
+
+  '@icons-pack/react-simple-icons@12.6.0(react@19.1.0)':
+    dependencies:
+      react: 19.1.0
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
