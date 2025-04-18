@@ -36,8 +36,8 @@ export default function OrgChartClient({
 
   return (
     <div className="mx-auto px-4 py-10 container">
-      <div className="flex flex-wrap items-center gap-4 mb-6">
-        <h1 className="font-bold text-2xl">
+      <div className="flex flex-wrap items-center gap-4 mb-6 p-2 w-fit">
+        <h1 className="font-extralight text-3xl">
           Government of the Socialist Republic of Vietnam
         </h1>
 

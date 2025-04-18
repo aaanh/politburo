@@ -1,6 +1,7 @@
 import { db } from "../db/drizzle";
 import { people } from "../db/schema";
 import { eq } from "drizzle-orm";
+import { positionAssignments } from "../db/schema";
 
 export class PeopleService {
   #db: typeof db;
@@ -44,6 +45,12 @@ export class PeopleService {
   }
 
   async delete(id: number) {
+    // First delete all position assignments for this person
+    await this.#db
+      .delete(positionAssignments)
+      .where(eq(positionAssignments.personId, id));
+
+    // Then delete the person
     return await this.#db
       .delete(people)
       .where(eq(people.id, id))

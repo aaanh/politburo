@@ -60,7 +60,7 @@ export default function AdminClient() {
   return (
     <div className="mx-auto py-10 container">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="font-bold text-2xl">Positions Management</h1>
+        <h1 className="font-extralight text-4xl">Positions Management</h1>
         <CreatePositionDialog
           isOpen={isCreateDialogOpen}
           onOpenChange={setIsCreateDialogOpen}
