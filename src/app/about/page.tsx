@@ -91,7 +91,7 @@ export default function About() {
         </Card>
 
         <p>
-          I&quot;m a software developer (currently a computer science student)
+          I&apos;m a software developer (currently a computer science student)
           who likes to push the limits and break the glass ceiling or whatever
           the expression is.
         </p>
@@ -104,13 +104,13 @@ export default function About() {
 
         <p>
           Still, that passion in me, coupled with the fact that I love my late
-          granddad&quot;s wartime stories, has fueled this project. I want to
+          granddad&apos;s wartime stories, has fueled this project. I want to
           build something that solves my annoyance whenever I want to query
           information on politics, government and military positions.
         </p>
 
         <p>
-          I hope it&quot;ll help a fellow nerd out if they ever come across this
+          I hope it&apos;ll help a fellow nerd out if they ever come across this
           site on their journey down the rabbit hole.
         </p>
 
@@ -236,28 +236,28 @@ export default function About() {
         <p>Bonjour,</p>
 
         <p>
-          Je m&quot;appelle Anh. Je suis développeuse logiciel (actuellement
-          étudiante en informatique) et j&quot;aime repousser les limites et
-          briser le plafond de verre ou peu importe l&quot;expression.
+          Je m&apos;appelle Anh. Je suis développeuse logiciel (actuellement
+          étudiante en informatique) et j&apos;aime repousser les limites et
+          briser le plafond de verre ou peu importe l&apos;expression.
         </p>
 
         <p>
-          J&quot;ai toujours eu un intérêt inné pour la politique, l&quot;armée
-          et le gouvernement. Cependant, il y a longtemps, j&quot;ai été
+          J&apos;ai toujours eu un intérêt inné pour la politique, l&apos;armée
+          et le gouvernement. Cependant, il y a longtemps, j&apos;ai été
           désillusionnée par la réalité du fonctionnement de la politique. Mais
-          après tout, c&quot;est dans la nature de la politique.
+          après tout, c&apos;est dans la nature de la politique.
         </p>
 
         <p>
           Malgré tout, cette passion en moi, combinée à mon amour pour les
-          histoires de guerre de mon grand-père aujourd&quot;hui décédé, a
+          histoires de guerre de mon grand-père aujourd&apos;hui décédé, a
           alimenté ce projet. Je veux créer quelque chose qui résout mon
           irritation chaque fois que je cherche des informations sur les postes
           politiques, gouvernementaux et militaires.
         </p>
 
         <p>
-          J&quot;espère que cela pourra aider un·e autre passionné·e s&quot;il
+          J&apos;espère que cela pourra aider un·e autre passionné·e s&apos;il
           ou elle tombe sur ce site au cours de ses recherches.
         </p>
 
@@ -267,7 +267,7 @@ export default function About() {
           Anh.
         </p>
 
-        <h2>Qu&quot;est-ce qu&quot;un politburo ?</h2>
+        <h2>Qu&apos;est-ce qu&apos;un politburo ?</h2>
 
         <p>Mot-valise de politique et bureau.</p>
 
@@ -276,7 +276,7 @@ export default function About() {
           occidental pour décrire les gouvernements communistes pendant la
           guerre froide, il sonne bien et il est temps de se réapproprier cette
           terminologie. La langue évolue naturellement avec le temps. Je
-          l&quot;utilise donc ici comme un terme valorisant pour ce site.
+          l&apos;utilise donc ici comme un terme valorisant pour ce site.
         </p>
 
         <p>
