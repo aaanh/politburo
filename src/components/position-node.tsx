@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AssignPeopleDialog } from "@/app/admin/components/assign-people-dialog";
 import { useState } from "react";
+import { useI18n } from "@/contexts/i18n-context";
 
 export interface Position {
   id: number;
@@ -40,7 +41,7 @@ export function PositionNode({
   onDelete,
   onAssign,
   onUnassign,
-  showActions = true
+  showActions = true,
 }: PositionNodeProps) {
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
   const hasChildren = position.children && position.children.length > 0;
@@ -58,29 +59,38 @@ export function PositionNode({
     }
   };
 
+  const { t } = useI18n();
+
   return (
     <>
       <div className="flex flex-col items-center">
         <div className="relative">
           {/* {level > 0 && (
-            <div className="absolute -top-4 left-1/2 w-px h-4 bg-gray-300" />
+            <div className="-top-4 left-1/2 absolute bg-gray-300 w-px h-4" />
           )} */}
           <div className="flex flex-col items-center">
-            <div className="group bg-white rounded-lg border border-gray-200 p-3 shadow-sm min-w-[200px] text-center relative">
-              <span className="font-medium">{position.title}</span>
-              {position.assignedPeople && position.assignedPeople.length > 0 && (
-                <div className="mt-2 text-sm text-gray-600">
-                  {position.assignedPeople.map(person => (
-                    <div key={person.id}>{person.name}</div>
-                  ))}
-                </div>
-              )}
+            <div className="group relative bg-white shadow-sm p-3 border border-gray-200 rounded-lg min-w-[200px] text-center">
+              <span className="font-medium">
+                {t(position.title.toLowerCase().replaceAll(" ", "-"))}
+              </span>
+              {position.assignedPeople &&
+                position.assignedPeople.length > 0 && (
+                  <div className="mt-2 text-gray-600 text-sm">
+                    {position.assignedPeople.map((person) => (
+                      <div key={person.id}>{person.name}</div>
+                    ))}
+                  </div>
+                )}
               {showActions && (onEdit || onDelete || onAssign) && (
-                <div className="absolute top-3 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <div className="top-3 right-2 absolute opacity-0 group-hover:opacity-100 transition-opacity">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="default" size="icon" className="h-6 w-6 hover:cursor-pointer">
-                        <MoreVertical className="h-4 w-4" />
+                      <Button
+                        variant="default"
+                        size="icon"
+                        className="w-6 h-6 hover:cursor-pointer"
+                      >
+                        <MoreVertical className="w-4 h-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -89,7 +99,9 @@ export function PositionNode({
                           Edit
                         </DropdownMenuItem>
                       )}
-                      <DropdownMenuItem onClick={() => setIsAssignDialogOpen(true)}>
+                      <DropdownMenuItem
+                        onClick={() => setIsAssignDialogOpen(true)}
+                      >
                         Assign People
                       </DropdownMenuItem>
                       {onDelete && (
@@ -110,9 +122,13 @@ export function PositionNode({
                 variant="ghost"
                 size="sm"
                 onClick={() => onToggleExpand(position.id)}
-                className="mt-2 h-6 w-6 p-0"
+                className="mt-2 p-0 w-6 h-6"
               >
-                {isNodeExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+                {isNodeExpanded ? (
+                  <ChevronDown className="w-4 h-4" />
+                ) : (
+                  <ChevronRight className="w-4 h-4" />
+                )}
               </Button>
             )}
           </div>
@@ -147,4 +163,4 @@ export function PositionNode({
       />
     </>
   );
-} 
+}

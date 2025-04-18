@@ -10,7 +10,7 @@ import {
   addChildPosition,
   assignPerson,
   unassignPerson,
-} from "../actions";
+} from "@/app/admin/actions";
 
 interface Position {
   id: number;
@@ -41,19 +41,26 @@ interface PositionsContextType {
   handleUnassign: (positionId: number, personId: number) => Promise<void>;
 }
 
-const PositionsContext = createContext<PositionsContextType | undefined>(undefined);
+const PositionsContext = createContext<PositionsContextType | undefined>(
+  undefined
+);
 
 interface PositionsProviderProps {
   children: ReactNode;
   initialPositions: Position[];
 }
 
-export function PositionsProvider({ children, initialPositions }: PositionsProviderProps) {
+export function PositionsProvider({
+  children,
+  initialPositions,
+}: PositionsProviderProps) {
   const [positions, setPositions] = useState<Position[]>(initialPositions);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
-  const [selectedPosition, setSelectedPosition] = useState<Position | null>(null);
+  const [selectedPosition, setSelectedPosition] = useState<Position | null>(
+    null
+  );
   const [newTitle, setNewTitle] = useState("");
 
   const handleCreate = async (parentId?: number) => {
@@ -64,16 +71,18 @@ export function PositionsProvider({ children, initialPositions }: PositionsProvi
           ...result.data,
           order: positions.length,
           children: [],
-          assignedPeople: []
+          assignedPeople: [],
         };
         if (parentId) {
-          setPositions(prev => prev.map(pos =>
-            pos.id === parentId
-              ? { ...pos, children: [...(pos.children || []), newPosition] }
-              : pos
-          ));
+          setPositions((prev) =>
+            prev.map((pos) =>
+              pos.id === parentId
+                ? { ...pos, children: [...(pos.children || []), newPosition] }
+                : pos
+            )
+          );
         } else {
-          setPositions(prev => [...prev, newPosition]);
+          setPositions((prev) => [...prev, newPosition]);
         }
         setNewTitle("");
         setIsCreateDialogOpen(false);
@@ -85,11 +94,13 @@ export function PositionsProvider({ children, initialPositions }: PositionsProvi
     if (selectedPosition && newTitle.trim()) {
       const result = await updatePosition(selectedPosition.id, newTitle.trim());
       if (result.success && result.data) {
-        setPositions(prev => prev.map(pos =>
-          pos.id === selectedPosition.id
-            ? { ...pos, title: newTitle.trim() }
-            : pos
-        ));
+        setPositions((prev) =>
+          prev.map((pos) =>
+            pos.id === selectedPosition.id
+              ? { ...pos, title: newTitle.trim() }
+              : pos
+          )
+        );
         setNewTitle("");
         setIsEditDialogOpen(false);
       }
@@ -100,7 +111,9 @@ export function PositionsProvider({ children, initialPositions }: PositionsProvi
     if (selectedPosition) {
       const result = await deletePosition(selectedPosition.id);
       if (result.success) {
-        setPositions(prev => prev.filter(pos => pos.id !== selectedPosition.id));
+        setPositions((prev) =>
+          prev.filter((pos) => pos.id !== selectedPosition.id)
+        );
         setSelectedPosition(null);
       }
     }
@@ -109,45 +122,56 @@ export function PositionsProvider({ children, initialPositions }: PositionsProvi
   const handleAddChild = async (parentId: number, childId: number) => {
     const result = await addChildPosition(parentId, childId);
     if (result.success) {
-      setPositions(prev => prev.map(pos => {
-        if (pos.id === parentId) {
-          const child = prev.find(p => p.id === childId);
-          if (child) {
-            return { ...pos, children: [...(pos.children || []), child] };
+      setPositions((prev) =>
+        prev.map((pos) => {
+          if (pos.id === parentId) {
+            const child = prev.find((p) => p.id === childId);
+            if (child) {
+              return { ...pos, children: [...(pos.children || []), child] };
+            }
           }
-        }
-        return pos;
-      }));
+          return pos;
+        })
+      );
     }
   };
 
   const handleAssign = async (positionId: number, personId: number) => {
     const result = await assignPerson(positionId, personId);
     if (result.success) {
-      setPositions(prev => prev.map(pos => {
-        if (pos.id === positionId) {
-          return {
-            ...pos,
-            assignedPeople: [...(pos.assignedPeople || []), { id: personId, name: "New Person" }]
-          };
-        }
-        return pos;
-      }));
+      setPositions((prev) =>
+        prev.map((pos) => {
+          if (pos.id === positionId) {
+            return {
+              ...pos,
+              assignedPeople: [
+                ...(pos.assignedPeople || []),
+                { id: personId, name: "New Person" },
+              ],
+            };
+          }
+          return pos;
+        })
+      );
     }
   };
 
   const handleUnassign = async (positionId: number, personId: number) => {
     const result = await unassignPerson(positionId, personId);
     if (result.success) {
-      setPositions(prev => prev.map(pos => {
-        if (pos.id === positionId) {
-          return {
-            ...pos,
-            assignedPeople: pos.assignedPeople?.filter(p => p.id !== personId)
-          };
-        }
-        return pos;
-      }));
+      setPositions((prev) =>
+        prev.map((pos) => {
+          if (pos.id === positionId) {
+            return {
+              ...pos,
+              assignedPeople: pos.assignedPeople?.filter(
+                (p) => p.id !== personId
+              ),
+            };
+          }
+          return pos;
+        })
+      );
     }
   };
 
@@ -185,4 +209,4 @@ export function usePositions() {
     throw new Error("usePositions must be used within a PositionsProvider");
   }
   return context;
-} 
+}
