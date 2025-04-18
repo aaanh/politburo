@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Position } from "@/components/position-node";
 import { useState, useEffect } from "react";
-import { getAllPeople, createPerson } from "../actions";
+import { getAllPeople, createPerson, getAllPositions } from "../actions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -42,19 +42,44 @@ export function AssignPeopleDialog({
 }: AssignPeopleDialogProps) {
   const [selectedPersonId, setSelectedPersonId] = useState<string>("");
   const [people, setPeople] = useState<Person[]>([]);
+  const [allPositions, setAllPositions] = useState<Position[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [newPersonName, setNewPersonName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const loadPeople = async () => {
-    const result = await getAllPeople();
-    if (result.success && result.data) {
-      setPeople(result.data);
+    setIsLoading(true);
+    try {
+      const [peopleResult, positionsResult] = await Promise.all([
+        getAllPeople(),
+        getAllPositions()
+      ]);
+      if (peopleResult.success && peopleResult.data) {
+        setPeople(peopleResult.data);
+      }
+      if (positionsResult.success && positionsResult.data) {
+        setAllPositions(positionsResult.data);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    loadPeople();
-  }, []);
+    if (isOpen) {
+      loadPeople();
+    }
+  }, [isOpen]);
+
+  const getPersonPositions = (personId: number) => {
+    const checkPosition = (pos: Position): boolean => {
+      if (pos.assignedPeople?.some(p => p.id === personId)) {
+        return true;
+      }
+      return pos.children?.some(checkPosition) || false;
+    };
+    return allPositions.filter(checkPosition);
+  };
 
   const handleCreatePerson = async () => {
     if (newPersonName.trim()) {
@@ -76,8 +101,8 @@ export function AssignPeopleDialog({
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-sm font-medium">Select Person</label>
+              <div className="flex justify-between items-center">
+                <label className="font-medium text-sm">Select Person</label>
                 <Button
                   variant="outline"
                   size="sm"
@@ -86,24 +111,46 @@ export function AssignPeopleDialog({
                   Create New
                 </Button>
               </div>
-              <Select value={selectedPersonId} onValueChange={setSelectedPersonId}>
+              <Select
+                value={selectedPersonId}
+                onValueChange={setSelectedPersonId}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a person" />
                 </SelectTrigger>
                 <SelectContent>
-                  {people.map((person) => (
-                    <SelectItem key={person.id} value={person.id.toString()}>
-                      {person.name}
-                    </SelectItem>
-                  ))}
+                  {people
+                    .filter(person => getPersonPositions(person.id).length === 0)
+                    .map((person) => (
+                      <SelectItem key={person.id} value={person.id.toString()}>
+                        {person.name}
+                      </SelectItem>
+                    ))}
+                  {people.some(person => getPersonPositions(person.id).length > 0) && (
+                    <>
+                      <SelectItem value="divider" disabled className="opacity-50">
+                        ──────────────
+                      </SelectItem>
+                      {people
+                        .filter(person => getPersonPositions(person.id).length > 0)
+                        .map((person) => (
+                          <SelectItem key={person.id} value={person.id.toString()}>
+                            {person.name}
+                          </SelectItem>
+                        ))}
+                    </>
+                  )}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <h3 className="text-sm font-medium">Assigned People</h3>
+              <h3 className="font-medium text-sm">Assigned People</h3>
               <div className="space-y-2">
                 {position.assignedPeople?.map((person) => (
-                  <div key={person.id} className="flex items-center justify-between">
+                  <div
+                    key={person.id}
+                    className="flex justify-between items-center"
+                  >
                     <span>{person.name}</span>
                     <Button
                       variant="destructive"
@@ -151,4 +198,4 @@ export function AssignPeopleDialog({
       </Dialog>
     </>
   );
-} 
+}

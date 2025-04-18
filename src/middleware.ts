@@ -7,14 +7,14 @@ export function middleware(request: NextRequest) {
   // Check if we're in production
   if (process.env.NODE_ENV === "production") {
     // Check if the request is for the /admin path
-    const restrictedPaths = ["/admin"];
+    const restrictedPaths = ["/admin", "/admin/people"];
     if (restrictedPaths.includes(request.nextUrl.pathname)) {
       // Redirect to home page
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
-  const ignorePaths = ["/admin", "/about"];
+  const ignorePaths = ["/admin", "/admin/people", "/about"];
 
   if (ignorePaths.includes(request.nextUrl.pathname)) {
     return NextResponse.next();
