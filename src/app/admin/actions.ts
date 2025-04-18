@@ -63,9 +63,9 @@ export async function getPositionHierarchy(id: number) {
       positionService.getAncestors(id),
       positionService.getDescendants(id),
     ]);
-    return { 
-      success: true, 
-      data: { children, parents, ancestors, descendants } 
+    return {
+      success: true,
+      data: { children, parents, ancestors, descendants },
     };
   } catch (error) {
     return { success: false, error: "Failed to get position hierarchy" };

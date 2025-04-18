@@ -19,10 +19,10 @@ export function OrgChart({
   onToggleExpand,
   onEdit,
   onDelete,
-  showActions = true
+  showActions = true,
 }: OrgChartProps) {
   return (
-    <div className="border rounded-lg p-8 bg-gray-50 min-h-[400px] flex justify-center flex-wrap">
+    <div className="flex flex-wrap justify-center bg-gray-50 p-8 border rounded-lg min-h-[400px]">
       {positions
         .sort((a, b) => a.order - b.order)
         .map((position) => (
@@ -32,7 +32,7 @@ export function OrgChart({
             level={0}
             isExpanded={expandedPositions.has(position.id)}
             expandedPositions={expandedPositions}
-            onToggleExpand={onToggleExpand || (() => { })}
+            onToggleExpand={onToggleExpand || (() => {})}
             onEdit={onEdit}
             onDelete={onDelete}
             showActions={showActions}
@@ -40,4 +40,4 @@ export function OrgChart({
         ))}
     </div>
   );
-} 
+}

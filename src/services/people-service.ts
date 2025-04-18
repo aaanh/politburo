@@ -32,7 +32,7 @@ export class PeopleService {
   }
 
   async readAll() {
-    return await this.#db.select().from(people);
+    return await this.#db.select().from(people).orderBy(people.name);
   }
 
   async update(id: number, name: string) {
@@ -51,9 +51,6 @@ export class PeopleService {
       .where(eq(positionAssignments.personId, id));
 
     // Then delete the person
-    return await this.#db
-      .delete(people)
-      .where(eq(people.id, id))
-      .returning();
+    return await this.#db.delete(people).where(eq(people.id, id)).returning();
   }
 }

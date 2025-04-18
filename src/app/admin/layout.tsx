@@ -18,7 +18,7 @@ export default function AdminLayout({
 
   return (
     <div>
-      <div className="border-b container mx-auto">
+      <div className="mx-auto border-b container">
         <nav className="flex">
           {navigation.map((item) => (
             <Link
@@ -39,4 +39,4 @@ export default function AdminLayout({
       {children}
     </div>
   );
-} 
+}

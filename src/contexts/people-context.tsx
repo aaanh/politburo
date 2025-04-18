@@ -39,7 +39,10 @@ interface PeopleProviderProps {
   initialPeople: Person[];
 }
 
-export function PeopleProvider({ children, initialPeople }: PeopleProviderProps) {
+export function PeopleProvider({
+  children,
+  initialPeople,
+}: PeopleProviderProps) {
   const [people, setPeople] = useState<Person[]>(initialPeople);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
@@ -117,4 +120,4 @@ export function usePeople() {
     throw new Error("usePeople must be used within a PeopleProvider");
   }
   return context;
-} 
+}

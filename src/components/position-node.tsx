@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { AssignPeopleDialog } from "@/app/admin/components/assign-people-dialog";
+import { AssignPeopleDialog } from "@/app/admin/components/people/assign-people-dialog";
 import { useState } from "react";
 import { useI18n } from "@/contexts/i18n-context";
 import { Badge } from "./ui/badge";

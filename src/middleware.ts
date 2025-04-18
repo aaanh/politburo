@@ -7,14 +7,14 @@ export function middleware(request: NextRequest) {
   // Check if we're in production
   if (process.env.NODE_ENV === "production") {
     // Check if the request is for the /admin path
-    const restrictedPaths = ["/admin", "/admin/people"];
+    const restrictedPaths = ["/admin", "/admin/people", "/admin/positions"];
     if (restrictedPaths.includes(request.nextUrl.pathname)) {
       // Redirect to home page
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
 
-  const ignorePaths = ["/admin", "/admin/people", "/about"];
+  const ignorePaths = ["/admin/positions", "/admin/people", "/about", "/admin"];
 
   if (ignorePaths.includes(request.nextUrl.pathname)) {
     return NextResponse.next();
@@ -25,5 +25,10 @@ export function middleware(request: NextRequest) {
 
 // Configure which paths the middleware should run on
 export const config = {
-  matcher: ["/admin", "/((?!api|static|.*\\..*|_next).*)"],
+  matcher: [
+    "/admin/positions",
+    "/admin/people",
+    "/admin",
+    "/((?!api|static|.*\\..*|_next).*)",
+  ],
 };
