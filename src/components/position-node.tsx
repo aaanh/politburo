@@ -9,6 +9,7 @@ import {
 import { AssignPeopleDialog } from "@/app/admin/components/assign-people-dialog";
 import { useState } from "react";
 import { useI18n } from "@/contexts/i18n-context";
+import { Badge } from "./ui/badge";
 
 export interface Position {
   id: number;
@@ -65,19 +66,18 @@ export function PositionNode({
     <>
       <div className="flex flex-col items-center">
         <div className="relative">
-          {/* {level > 0 && (
-            <div className="-top-4 left-1/2 absolute bg-gray-300 w-px h-4" />
-          )} */}
           <div className="flex flex-col items-center">
-            <div className="group relative bg-white shadow-sm p-3 border border-gray-200 rounded-lg min-w-[200px] text-center">
+            <div className="group relative bg-white shadow-sm p-3 border border-gray-200 rounded-lg w-[300px] text-center">
               <span className="font-medium">
                 {t(position.title.toLowerCase().replaceAll(" ", "-"))}
               </span>
               {position.assignedPeople &&
                 position.assignedPeople.length > 0 && (
-                  <div className="mt-2 text-gray-600 text-sm">
+                  <div className="flex flex-wrap justify-center gap-2 mt-2 text-gray-600 text-sm">
                     {position.assignedPeople.map((person) => (
-                      <div key={person.id}>{person.name}</div>
+                      <Badge variant={"secondary"} key={person.id}>
+                        {person.name}
+                      </Badge>
                     ))}
                   </div>
                 )}
@@ -134,7 +134,7 @@ export function PositionNode({
           </div>
         </div>
         {hasChildren && isNodeExpanded && (
-          <div className="flex flex-wrap justify-center gap-4 mt-4">
+          <div className="flex flex-wrap justify-center lg:justify-between gap-4 mt-4">
             {position.children?.map((child) => (
               <PositionNode
                 key={child.id}
