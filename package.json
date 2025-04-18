@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "i18nexus pull --path src/locales && next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -46,6 +46,7 @@
     "@types/react-dom": "^19",
     "@types/ws": "^8.18.1",
     "drizzle-kit": "^0.31.0",
+    "i18nexus-cli": "^3.5.0",
     "tailwindcss": "^4",
     "tsx": "^4.19.3",
     "typescript": "^5"
