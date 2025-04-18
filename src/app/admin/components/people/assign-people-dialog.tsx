@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Position } from "@/components/position-node";
 import { useState, useEffect } from "react";
-import { getAllPeople, createPerson, getAllPositions } from "../actions";
+import { getAllPeople, createPerson, getAllPositions } from "../../actions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
@@ -52,7 +52,7 @@ export function AssignPeopleDialog({
     try {
       const [peopleResult, positionsResult] = await Promise.all([
         getAllPeople(),
-        getAllPositions()
+        getAllPositions(),
       ]);
       if (peopleResult.success && peopleResult.data) {
         setPeople(peopleResult.data);
@@ -73,7 +73,7 @@ export function AssignPeopleDialog({
 
   const getPersonPositions = (personId: number) => {
     const checkPosition = (pos: Position): boolean => {
-      if (pos.assignedPeople?.some(p => p.id === personId)) {
+      if (pos.assignedPeople?.some((p) => p.id === personId)) {
         return true;
       }
       return pos.children?.some(checkPosition) || false;
@@ -120,21 +120,34 @@ export function AssignPeopleDialog({
                 </SelectTrigger>
                 <SelectContent>
                   {people
-                    .filter(person => getPersonPositions(person.id).length === 0)
+                    .filter(
+                      (person) => getPersonPositions(person.id).length === 0
+                    )
                     .map((person) => (
                       <SelectItem key={person.id} value={person.id.toString()}>
                         {person.name}
                       </SelectItem>
                     ))}
-                  {people.some(person => getPersonPositions(person.id).length > 0) && (
+                  {people.some(
+                    (person) => getPersonPositions(person.id).length > 0
+                  ) && (
                     <>
-                      <SelectItem value="divider" disabled className="opacity-50">
+                      <SelectItem
+                        value="divider"
+                        disabled
+                        className="opacity-50"
+                      >
                         ──────────────
                       </SelectItem>
                       {people
-                        .filter(person => getPersonPositions(person.id).length > 0)
+                        .filter(
+                          (person) => getPersonPositions(person.id).length > 0
+                        )
                         .map((person) => (
-                          <SelectItem key={person.id} value={person.id.toString()}>
+                          <SelectItem
+                            key={person.id}
+                            value={person.id.toString()}
+                          >
                             {person.name}
                           </SelectItem>
                         ))}

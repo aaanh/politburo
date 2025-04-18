@@ -19,7 +19,7 @@ import { ArrowUpDown } from "lucide-react";
 type SortField = "name" | "position";
 type SortOrder = "asc" | "desc";
 
-export default function PeopleClient() {
+export default function People() {
   const {
     people,
     isCreateDialogOpen,
@@ -101,7 +101,7 @@ export default function PeopleClient() {
                   className="flex items-center gap-1"
                 >
                   Name
-                  <ArrowUpDown className="h-4 w-4" />
+                  <ArrowUpDown className="w-4 h-4" />
                 </Button>
               </TableHead>
               <TableHead>
@@ -111,7 +111,7 @@ export default function PeopleClient() {
                   className="flex items-center gap-1"
                 >
                   Current Position
-                  <ArrowUpDown className="h-4 w-4" />
+                  <ArrowUpDown className="w-4 h-4" />
                 </Button>
               </TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
@@ -160,4 +160,4 @@ export default function PeopleClient() {
       />
     </div>
   );
-} 
+}

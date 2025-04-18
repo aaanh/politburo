@@ -7,6 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { UserPlus2Icon } from "lucide-react";
 
 interface CreatePersonDialogProps {
   isOpen: boolean;
@@ -26,7 +27,9 @@ export function CreatePersonDialog({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
-        <Button>Create Person</Button>
+        <Button className="hover:cursor-pointer">
+          <UserPlus2Icon />
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -43,4 +46,4 @@ export function CreatePersonDialog({
       </DialogContent>
     </Dialog>
   );
-} 
+}

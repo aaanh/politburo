@@ -6,9 +6,7 @@ import { useState } from "react";
 import { CreatePositionDialog } from "./create-position-dialog";
 import { EditPositionDialog } from "./edit-position-dialog";
 
-interface AdminClientProps {}
-
-export default function AdminClient() {
+export default function PositionManagement() {
   const {
     positions,
     isCreateDialogOpen,

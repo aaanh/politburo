@@ -2,16 +2,13 @@
 
 import { OrgChart, Position } from "@/components/org-chart";
 import { useI18n } from "@/contexts/i18n-context";
-import Image from "next/image";
 import { useState } from "react";
 
-interface OrgChartClientProps {
+interface HomeProps {
   initialPositions: Position[];
 }
 
-export default function OrgChartClient({
-  initialPositions,
-}: OrgChartClientProps) {
+export default function Home({ initialPositions }: HomeProps) {
   const getAllPositionIds = (positions: Position[]): number[] => {
     return positions.flatMap((pos) => [
       pos.id,

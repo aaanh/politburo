@@ -20,7 +20,7 @@ export default function LocaleDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size={"icon"}>
+        <Button className="hover:cursor-pointer" size={"icon"}>
           <Globe2Icon />
         </Button>
       </DropdownMenuTrigger>
