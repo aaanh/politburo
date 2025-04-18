@@ -25,7 +25,7 @@ const navTargets = [
 
 export default function NavBar() {
   return (
-    <div className="mx-auto my-4 container">
+    <div className="mx-auto my-4 p-4 container">
       <nav className="flex justify-between items-center bg-accent/25 p-2 border rounded-xl">
         <div>
           <h1 className="text-2xl">
@@ -37,7 +37,7 @@ export default function NavBar() {
             </Link>
           </h1>
         </div>
-        <div className="">
+        <div className="flex flex-wrap gap-2">
           {navTargets.map((target) => (
             <Link
               key={target.href}

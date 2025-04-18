@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/nav-bar";
+import Footer from "@/components/footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +16,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "PolitBuro",
-  description: "A modern-looking Vietnamese Government organization chart. Not affiliated with the government itself. A hobby project.",
+  description:
+    "A modern-looking Vietnamese Government organization chart. Not affiliated with the government itself. A hobby project.",
 };
 
 export default function RootLayout({
@@ -30,6 +32,9 @@ export default function RootLayout({
       >
         <NavBar />
         {children}
+        <div className="mx-auto my-4 p-4 container">
+          <Footer />
+        </div>
       </body>
     </html>
   );
