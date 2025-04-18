@@ -1,5 +1,5 @@
 const i18nConfig = {
-  locales: ["en", "vi"],
+  locales: ["en", "vi", "fr"],
   defaultLocale: "en",
 };
 

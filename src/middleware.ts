@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 import { i18nRouter } from "next-i18n-router";
 import i18nConfig from "./i18nConfig";
 
@@ -11,6 +11,10 @@ export function middleware(request: NextRequest) {
       // Redirect to home page
       return NextResponse.redirect(new URL("/", request.url));
     }
+  }
+
+  if (request.nextUrl.pathname === "/admin") {
+    return NextResponse.next();
   }
 
   return i18nRouter(request, i18nConfig);

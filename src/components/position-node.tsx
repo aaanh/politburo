@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AssignPeopleDialog } from "@/app/admin/components/assign-people-dialog";
 import { useState } from "react";
+import { useI18n } from "@/contexts/i18n-context";
 
 export interface Position {
   id: number;
@@ -58,6 +59,8 @@ export function PositionNode({
     }
   };
 
+  const { t } = useI18n();
+
   return (
     <>
       <div className="flex flex-col items-center">
@@ -67,7 +70,9 @@ export function PositionNode({
           )} */}
           <div className="flex flex-col items-center">
             <div className="group relative bg-white shadow-sm p-3 border border-gray-200 rounded-lg min-w-[200px] text-center">
-              <span className="font-medium">{position.title}</span>
+              <span className="font-medium">
+                {t(position.title.toLowerCase().replaceAll(" ", "-"))}
+              </span>
               {position.assignedPeople &&
                 position.assignedPeople.length > 0 && (
                   <div className="mt-2 text-gray-600 text-sm">

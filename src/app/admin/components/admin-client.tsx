@@ -1,13 +1,12 @@
 "use client";
 
-import { usePositions } from "./positions-context";
+import { usePositions } from "@/contexts/positions-context";
 import { Position, PositionNode } from "@/components/position-node";
 import { useState } from "react";
 import { CreatePositionDialog } from "./create-position-dialog";
 import { EditPositionDialog } from "./edit-position-dialog";
 
-interface AdminClientProps {
-}
+interface AdminClientProps {}
 
 export default function AdminClient() {
   const {
@@ -28,9 +27,9 @@ export default function AdminClient() {
   } = usePositions();
 
   const getAllPositionIds = (positions: Position[]): number[] => {
-    return positions.flatMap(pos => [
+    return positions.flatMap((pos) => [
       pos.id,
-      ...(pos.children ? getAllPositionIds(pos.children) : [])
+      ...(pos.children ? getAllPositionIds(pos.children) : []),
     ]);
   };
 
@@ -40,7 +39,7 @@ export default function AdminClient() {
   const [selectedParentId, setSelectedParentId] = useState<string>("");
 
   const toggleExpand = (positionId: number) => {
-    setExpandedPositions(prev => {
+    setExpandedPositions((prev) => {
       const next = new Set(prev);
       if (next.has(positionId)) {
         next.delete(positionId);
@@ -52,15 +51,16 @@ export default function AdminClient() {
   };
 
   const handleCreateWithParent = () => {
-    const parentId = selectedParentId === "root" ? undefined : parseInt(selectedParentId);
+    const parentId =
+      selectedParentId === "root" ? undefined : parseInt(selectedParentId);
     handleCreate(parentId);
     setSelectedParentId("");
   };
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="mx-auto py-10 container">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Positions Management</h1>
+        <h1 className="font-bold text-2xl">Positions Management</h1>
         <CreatePositionDialog
           isOpen={isCreateDialogOpen}
           onOpenChange={setIsCreateDialogOpen}
@@ -73,7 +73,7 @@ export default function AdminClient() {
         />
       </div>
 
-      <div className="border rounded-lg p-8 bg-gray-50 min-h-[400px] flex justify-center">
+      <div className="flex justify-center bg-gray-50 p-8 border rounded-lg min-h-[400px]">
         {positions
           .sort((a, b) => a.order - b.order)
           .map((position) => (
@@ -106,11 +106,14 @@ export default function AdminClient() {
         onParentIdChange={setSelectedParentId}
         positions={positions}
         onSave={() => {
-          const parentId = selectedParentId === "root" ? undefined : parseInt(selectedParentId);
+          const parentId =
+            selectedParentId === "root"
+              ? undefined
+              : parseInt(selectedParentId);
           handleEdit(parentId);
           setSelectedParentId("");
         }}
       />
     </div>
   );
-} 
+}
