@@ -21,8 +21,8 @@ const navTargets = [
 
 export default function NavBar() {
   return (
-    <div className="mx-auto my-4 p-4 container">
-      <nav className="flex justify-between items-center gap-4 bg-accent/25 p-2 border rounded-xl">
+    <div className="p-8">
+      <nav className="top-0 md:top-8 right-0 left-0 z-50 fixed flex justify-between items-center gap-4 bg-accent/50 shadow backdrop-blur mx-auto p-2 border rounded-lg container">
         <div>
           <h1 className="text-2xl">
             <Link
