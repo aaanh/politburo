@@ -12,13 +12,13 @@ export default function AdminLayout({
   const pathname = usePathname();
 
   const navigation = [
-    { name: "Positions", href: "/admin" },
+    { name: "Positions", href: "/admin/positions" },
     { name: "People", href: "/admin/people" },
   ];
 
   return (
     <div>
-      <div className="mx-auto border-b container">
+      <div className="mx-auto mt-12 border-b container">
         <nav className="flex">
           {navigation.map((item) => (
             <Link

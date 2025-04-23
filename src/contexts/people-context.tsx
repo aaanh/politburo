@@ -56,6 +56,7 @@ export function PeopleProvider({
         setPeople((prev) => [...prev, result.data]);
         setNewName("");
         setIsCreateDialogOpen(false);
+        toast.success(`Created ${newName.trim()}`);
       }
     }
   };
@@ -71,6 +72,7 @@ export function PeopleProvider({
               : person
           )
         );
+        toast.success(`Updated ${selectedPerson.name}`);
         setNewName("");
         setIsEditDialogOpen(false);
       }
@@ -82,9 +84,9 @@ export function PeopleProvider({
     if (personToDelete) {
       const result = await deletePerson(personToDelete.id);
       if (result.success) {
+        toast.success(`Deleted ${personToDelete.name}`);
         setPeople((prev) => prev.filter((p) => p.id !== personToDelete.id));
         setSelectedPerson(null);
-        toast.success("Person deleted successfully");
       } else {
         toast.error("Failed to delete person");
       }

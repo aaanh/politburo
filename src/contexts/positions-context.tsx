@@ -67,6 +67,7 @@ export function PositionsProvider({
     if (newTitle.trim()) {
       const result = await createPosition(newTitle.trim(), parentId);
       if (result.success && result.data) {
+        toast(`Created position ${result.data.title}`);
         const newPosition: Position = {
           ...result.data,
           order: positions.length,
@@ -94,6 +95,7 @@ export function PositionsProvider({
     if (selectedPosition && newTitle.trim()) {
       const result = await updatePosition(selectedPosition.id, newTitle.trim());
       if (result.success && result.data) {
+        toast(`Updated ${selectedPosition?.title}`);
         setPositions((prev) =>
           prev.map((pos) =>
             pos.id === selectedPosition.id
@@ -111,6 +113,7 @@ export function PositionsProvider({
     if (selectedPosition) {
       const result = await deletePosition(selectedPosition.id);
       if (result.success) {
+        toast(`Deleted position ${selectedPosition}`);
         setPositions((prev) =>
           prev.filter((pos) => pos.id !== selectedPosition.id)
         );
@@ -139,6 +142,10 @@ export function PositionsProvider({
   const handleAssign = async (positionId: number, personId: number) => {
     const result = await assignPerson(positionId, personId);
     if (result.success) {
+      toast(
+        `Assigned person ${result.data?.personId} to position ${result.data?.positionId}`
+      );
+
       setPositions((prev) =>
         prev.map((pos) => {
           if (pos.id === positionId) {
@@ -159,6 +166,9 @@ export function PositionsProvider({
   const handleUnassign = async (positionId: number, personId: number) => {
     const result = await unassignPerson(positionId, personId);
     if (result.success) {
+      toast(
+        `Unassigned person ${result.data?.personId} from position ${result.data?.positionId}`
+      );
       setPositions((prev) =>
         prev.map((pos) => {
           if (pos.id === positionId) {

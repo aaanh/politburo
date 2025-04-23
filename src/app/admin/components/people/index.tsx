@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/table";
 import { usePositions } from "@/contexts/positions-context";
 import { ArrowUpDown } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 type SortField = "name" | "position";
 type SortOrder = "asc" | "desc";
@@ -95,24 +96,22 @@ export default function People() {
           <TableHeader>
             <TableRow>
               <TableHead>
-                <Button
-                  variant="ghost"
+                <button
                   onClick={() => handleSort("name")}
-                  className="flex items-center gap-1"
+                  className="group flex items-center gap-1 p-2 hover:cursor-pointer"
                 >
                   Name
-                  <ArrowUpDown className="w-4 h-4" />
-                </Button>
+                  <ArrowUpDown className="hidden group-hover:inline-block w-4 h-4" />
+                </button>
               </TableHead>
               <TableHead>
-                <Button
-                  variant="ghost"
+                <button
                   onClick={() => handleSort("position")}
-                  className="flex items-center gap-1"
+                  className="group flex items-center gap-1 p-2 hover:cursor-pointer"
                 >
                   Current Position
-                  <ArrowUpDown className="w-4 h-4" />
-                </Button>
+                  <ArrowUpDown className="hidden group-hover:inline-block w-4 h-4" />
+                </button>
               </TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
@@ -121,7 +120,17 @@ export default function People() {
             {sortedPeople.map((person) => (
               <TableRow key={person.id}>
                 <TableCell>{person.name}</TableCell>
-                <TableCell>{getPersonPosition(person.id)}</TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      getPersonPosition(person.id) === "Not assigned"
+                        ? "default"
+                        : "secondary"
+                    }
+                  >
+                    {getPersonPosition(person.id)}
+                  </Badge>
+                </TableCell>
                 <TableCell>
                   <div className="flex gap-2">
                     <Button

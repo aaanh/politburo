@@ -133,8 +133,9 @@ export function PositionNode({
             )}
           </div>
         </div>
+
         {hasChildren && isNodeExpanded && (
-          <div className="flex flex-wrap justify-center lg:justify-between gap-4 mt-4">
+          <div className="flex flex-wrap justify-center lg:justify-between gap-4 bg-destructive/5 shadow mt-4 p-4 border-2 rounded-xl">
             {position.children?.map((child) => (
               <PositionNode
                 key={child.id}
