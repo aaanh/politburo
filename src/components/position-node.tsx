@@ -73,7 +73,7 @@ export function PositionNode({
               </span>
               {position.assignedPeople &&
                 position.assignedPeople.length > 0 && (
-                  <div className="flex flex-wrap justify-center gap-2 mt-2 text-gray-600 text-sm">
+                  <div className="flex flex-wrap justify-center gap-2 mt-2">
                     {position.assignedPeople.map((person) => (
                       <Badge variant={"secondary"} key={person.id}>
                         {person.name}
@@ -135,7 +135,7 @@ export function PositionNode({
         </div>
 
         {hasChildren && isNodeExpanded && (
-          <div className="flex flex-wrap justify-center lg:justify-between gap-4 bg-destructive/5 shadow mt-4 p-4 border-2 rounded-xl">
+          <div className="flex flex-wrap justify-center lg:justify-between gap-4 bg-accent/5 shadow mt-4 p-4 border-2 border-red-400/25 rounded-xl">
             {position.children?.map((child) => (
               <PositionNode
                 key={child.id}
