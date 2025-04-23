@@ -10,7 +10,8 @@ const peopleService = PeopleService.getInstance();
 export async function createPosition(title: string, parentId?: number) {
   try {
     const result = await positionService.create(title, parentId);
-    revalidatePath("/admin");
+    revalidatePath("/admin/positions");
+    revalidatePath("/admin/people");
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: "Failed to create position" };
@@ -38,7 +39,7 @@ export async function getAllPositions() {
 export async function updatePosition(id: number, title: string) {
   try {
     const result = await positionService.update(id, title);
-    revalidatePath("/admin");
+    revalidatePath("/admin/positions");
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: "Failed to update position" };
@@ -48,7 +49,7 @@ export async function updatePosition(id: number, title: string) {
 export async function deletePosition(id: number) {
   try {
     const result = await positionService.delete(id);
-    revalidatePath("/admin");
+    revalidatePath("/admin/positions");
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: "Failed to delete position" };
@@ -75,7 +76,7 @@ export async function getPositionHierarchy(id: number) {
 export async function addChildPosition(parentId: number, childId: number) {
   try {
     await positionService.addChild(parentId, childId);
-    revalidatePath("/admin");
+    revalidatePath("/admin/positions");
     return { success: true };
   } catch (error) {
     return { success: false, error: "Failed to add child position" };
@@ -85,8 +86,8 @@ export async function addChildPosition(parentId: number, childId: number) {
 export async function createPerson(name: string) {
   try {
     const result = await peopleService.create(name);
-    revalidatePath("/admin");
     revalidatePath("/admin/people");
+    revalidatePath("/admin/positions");
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: "Failed to create person" };
@@ -114,8 +115,8 @@ export async function getAllPeople() {
 export async function updatePerson(id: number, name: string) {
   try {
     const result = await peopleService.update(id, name);
-    revalidatePath("/admin");
     revalidatePath("/admin/people");
+    revalidatePath("/admin/positions");
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: "Failed to update person" };
@@ -125,8 +126,8 @@ export async function updatePerson(id: number, name: string) {
 export async function deletePerson(id: number) {
   try {
     const result = await peopleService.delete(id);
-    revalidatePath("/admin");
     revalidatePath("/admin/people");
+    revalidatePath("/admin/positions");
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: "Failed to delete person" };
@@ -136,8 +137,8 @@ export async function deletePerson(id: number) {
 export async function assignPerson(positionId: number, personId: number) {
   try {
     const result = await positionService.assignPerson(positionId, personId);
-    revalidatePath("/admin");
     revalidatePath("/admin/people");
+    revalidatePath("/admin/positions");
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: "Failed to assign person" };
@@ -147,8 +148,8 @@ export async function assignPerson(positionId: number, personId: number) {
 export async function unassignPerson(positionId: number, personId: number) {
   try {
     const result = await positionService.unassignPerson(positionId, personId);
-    revalidatePath("/admin");
     revalidatePath("/admin/people");
+    revalidatePath("/admin/positions");
     return { success: true, data: result };
   } catch (error) {
     return { success: false, error: "Failed to unassign person" };

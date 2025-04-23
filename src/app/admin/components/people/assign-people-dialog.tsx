@@ -17,6 +17,7 @@ import { useState, useEffect } from "react";
 import { getAllPeople, createPerson, getAllPositions } from "../../actions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface AssignPeopleDialogProps {
   isOpen: boolean;
@@ -85,9 +86,11 @@ export function AssignPeopleDialog({
     if (newPersonName.trim()) {
       const result = await createPerson(newPersonName.trim());
       if (result.success) {
+        toast(`Added ${newPersonName}`, {
+          description: new Date().toLocaleTimeString(),
+        });
         await loadPeople();
         setNewPersonName("");
-        setIsCreateDialogOpen(false);
       }
     }
   };
@@ -137,7 +140,7 @@ export function AssignPeopleDialog({
                         disabled
                         className="opacity-50"
                       >
-                        ──────────────
+                        ───────Assigned────────
                       </SelectItem>
                       {people
                         .filter(
