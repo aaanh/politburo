@@ -18,8 +18,8 @@ export default function AdminLayout({
 
   return (
     <div>
-      <div className="mx-auto mt-12 border-b container">
-        <nav className="flex">
+      <div className="z-50 fixed mt-10 w-full">
+        <nav className="flex bg-background/50 backdrop-blur mx-auto border-b container">
           {navigation.map((item) => (
             <Link
               key={item.name}
@@ -36,7 +36,7 @@ export default function AdminLayout({
           ))}
         </nav>
       </div>
-      {children}
+      <section className="pt-18">{children}</section>
     </div>
   );
 }

@@ -3,6 +3,8 @@
 import { OrgChart, Position } from "@/components/org-chart";
 import { useI18n } from "@/contexts/i18n-context";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface HomeProps {
   initialPositions: Position[];
@@ -32,12 +34,20 @@ export default function Home({ initialPositions }: HomeProps) {
     });
   };
 
+  const expandAll = () => {
+    setExpandedPositions(new Set(getAllPositionIds(initialPositions)));
+  };
+
+  const collapseAll = () => {
+    setExpandedPositions(new Set());
+  };
+
   const { t } = useI18n();
 
   return (
-    <div className="mx-auto px-4 py-10 container">
-      <div className="flex flex-wrap items-center gap-4 mb-6 p-2 w-fit">
-        <h1 className="font-extralight text-3xl">
+    <div className="flex flex-col mx-auto mt-4 py-6 h-[calc(100vh-8rem)] container">
+      <div className="flex flex-wrap items-center gap-4 mb-4 p-2">
+        <h1 className="font-extralight text-lg md:text-3xl text-center">
           {t("government-of-the-socialist-republic-of-vietnam")}
         </h1>
 
@@ -55,13 +65,36 @@ export default function Home({ initialPositions }: HomeProps) {
             fill="#ff0"
           />
         </svg>
+
+        <div className="flex items-center gap-2 ml-auto">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={expandAll}
+            className="flex items-center gap-1"
+          >
+            <ChevronDown className="w-4 h-4" />
+            {t("expand-all") || "Expand All"}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={collapseAll}
+            className="flex items-center gap-1"
+          >
+            <ChevronUp className="w-4 h-4" />
+            {t("collapse-all") || "Collapse All"}
+          </Button>
+        </div>
       </div>
 
-      <OrgChart
-        positions={initialPositions}
-        expandedPositions={expandedPositions}
-        onToggleExpand={toggleExpand}
-      />
+      <div className="flex-1 shadow border md:rounded-xl overflow-auto">
+        <OrgChart
+          positions={initialPositions}
+          expandedPositions={expandedPositions}
+          onToggleExpand={toggleExpand}
+        />
+      </div>
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { PeopleProvider } from "@/contexts/people-context";
 import { PositionsProvider } from "@/contexts/positions-context";
 import I18nProvider from "@/contexts/i18n-context";
 import People from "../components/people";
+import Footer from "@/components/footer";
 
 export default async function PeoplePage({
   params,
@@ -31,6 +32,7 @@ export default async function PeoplePage({
       <PeopleProvider initialPeople={people}>
         <I18nProvider locale={resolvedLocale} namespaces={["default"]}>
           <People />
+          <Footer />
         </I18nProvider>
       </PeopleProvider>
     </PositionsProvider>

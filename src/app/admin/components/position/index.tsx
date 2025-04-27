@@ -56,8 +56,8 @@ export default function PositionManagement() {
   };
 
   return (
-    <div className="mx-auto py-10 container">
-      <div className="flex justify-between items-center mb-6">
+    <div className="flex flex-col mx-auto py-6 h-[calc(100vh-14rem)] container">
+      <div className="flex justify-between items-center mb-4">
         <h1 className="font-extralight text-4xl">Positions Management</h1>
         <CreatePositionDialog
           isOpen={isCreateDialogOpen}
@@ -71,32 +71,34 @@ export default function PositionManagement() {
         />
       </div>
 
-      <div className="flex justify-center bg-gray-50 p-8 border rounded-lg min-h-[400px]">
-        {positions
-          .sort((a, b) => a.order - b.order)
-          .map((position) => (
-            <PositionNode
-              key={position.id}
-              position={position}
-              level={0}
-              isExpanded={expandedPositions.has(position.id)}
-              expandedPositions={expandedPositions}
-              onToggleExpand={toggleExpand}
-              onEdit={(pos) => {
-                setSelectedPosition(pos);
-                setNewTitle(pos.title);
-                if (pos.isCreatingChild) {
-                  setSelectedParentId(pos.parentId?.toString() || "");
-                  setIsCreateDialogOpen(true);
-                } else {
-                  setIsEditDialogOpen(true);
-                }
-              }}
-              onDelete={handleDelete}
-              onAssign={handleAssign}
-              onUnassign={handleUnassign}
-            />
-          ))}
+      <div className="flex flex-col flex-1 bg-gray-50 border rounded-lg overflow-hidden">
+        <div className="flex justify-center p-8 overflow-auto">
+          {positions
+            .sort((a, b) => a.order - b.order)
+            .map((position) => (
+              <PositionNode
+                key={position.id}
+                position={position}
+                level={0}
+                isExpanded={expandedPositions.has(position.id)}
+                expandedPositions={expandedPositions}
+                onToggleExpand={toggleExpand}
+                onEdit={(pos) => {
+                  setSelectedPosition(pos);
+                  setNewTitle(pos.title);
+                  if (pos.isCreatingChild) {
+                    setSelectedParentId(pos.parentId?.toString() || "");
+                    setIsCreateDialogOpen(true);
+                  } else {
+                    setIsEditDialogOpen(true);
+                  }
+                }}
+                onDelete={handleDelete}
+                onAssign={handleAssign}
+                onUnassign={handleUnassign}
+              />
+            ))}
+        </div>
       </div>
 
       <EditPositionDialog

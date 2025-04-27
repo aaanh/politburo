@@ -22,7 +22,7 @@ export function OrgChart({
   showActions = true,
 }: OrgChartProps) {
   return (
-    <div className="flex flex-wrap justify-center bg-gray-50 p-8 border rounded-lg min-h-[400px]">
+    <div className="flex flex-wrap justify-center bg-gray-50 p-8 md:rounded-xl min-h-[400px]">
       {positions
         .sort((a, b) => a.order - b.order)
         .map((position) => (
