@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useCallback,
+} from "react";
 import { toast } from "sonner";
 import {
   createPosition,
@@ -62,6 +68,11 @@ export function PositionsProvider({
     null
   );
   const [newTitle, setNewTitle] = useState("");
+
+  // Use useCallback for frequently called state setters
+  const handleSetNewTitle = useCallback((title: string) => {
+    setNewTitle(title);
+  }, []);
 
   const handleCreate = async (parentId?: number) => {
     if (newTitle.trim()) {
@@ -195,7 +206,7 @@ export function PositionsProvider({
         isAssignDialogOpen,
         selectedPosition,
         newTitle,
-        setNewTitle,
+        setNewTitle: handleSetNewTitle,
         setIsCreateDialogOpen,
         setIsEditDialogOpen,
         setIsAssignDialogOpen,

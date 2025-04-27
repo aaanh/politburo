@@ -34,6 +34,9 @@ export default function LocaleDropdown() {
         <DropdownMenuItem onClick={() => handleChooseLocale("fr")}>
           Français
         </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleChooseLocale("de")}>
+          Deutsch
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

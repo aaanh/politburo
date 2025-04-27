@@ -13,11 +13,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Position } from "@/components/position-node";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { getAllPeople, createPerson, getAllPositions } from "../../actions";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { CreatePeople } from "@/types";
+import { CreatePeopleSchema } from "@/types/zod-schema";
+import { Preahvihear } from "next/font/google";
 
 interface AssignPeopleDialogProps {
   isOpen: boolean;
@@ -45,10 +48,10 @@ export function AssignPeopleDialog({
   const [people, setPeople] = useState<Person[]>([]);
   const [allPositions, setAllPositions] = useState<Position[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
-  const [newPersonName, setNewPersonName] = useState("");
+  const [newPerson, setNewPerson] = useState<CreatePeople | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const loadPeople = async () => {
+  const loadPeople = useCallback(async () => {
     setIsLoading(true);
     try {
       const [peopleResult, positionsResult] = await Promise.all([
@@ -64,36 +67,85 @@ export function AssignPeopleDialog({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
       loadPeople();
     }
-  }, [isOpen]);
+  }, [isOpen, loadPeople]);
 
-  const getPersonPositions = (personId: number) => {
-    const checkPosition = (pos: Position): boolean => {
-      if (pos.assignedPeople?.some((p) => p.id === personId)) {
-        return true;
-      }
-      return pos.children?.some(checkPosition) || false;
-    };
-    return allPositions.filter(checkPosition);
-  };
+  const getPersonPositions = useCallback(
+    (personId: number) => {
+      const checkPosition = (pos: Position): boolean => {
+        if (pos.assignedPeople?.some((p) => p.id === personId)) {
+          return true;
+        }
+        return pos.children?.some(checkPosition) || false;
+      };
+      return allPositions.filter(checkPosition);
+    },
+    [allPositions]
+  );
 
-  const handleCreatePerson = async () => {
-    if (newPersonName.trim()) {
-      const result = await createPerson(newPersonName.trim());
+  // Memoize person positions to avoid recalculation on every render
+  const personPositionsMap = useMemo(() => {
+    const map = new Map<number, boolean>();
+    people.forEach((person) => {
+      map.set(person.id, getPersonPositions(person.id).length > 0);
+    });
+    return map;
+  }, [people, getPersonPositions]);
+
+  const handleCreatePerson = useCallback(async () => {
+    const person = CreatePeopleSchema.safeParse(newPerson).data;
+
+    if (person) {
+      const result = await createPerson({
+        name: person.name.trim(),
+        profile: person.profile,
+      });
       if (result.success) {
-        toast(`Added ${newPersonName}`, {
-          description: new Date().toLocaleTimeString(),
+        toast(`Added ${person.name}`, {
+          description: `Executed at ${new Date().toLocaleTimeString()}`,
         });
         await loadPeople();
-        setNewPersonName("");
+        setNewPerson(null);
       }
     }
-  };
+  }, [newPerson, loadPeople]);
+
+  const handleNameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNewPerson((prev) => ({
+        name: e.target.value,
+        profile: prev?.profile ?? null,
+      }));
+    },
+    []
+  );
+
+  const handleSelectChange = useCallback((value: string) => {
+    setSelectedPersonId(value);
+  }, []);
+
+  const handleAssignClick = useCallback(() => {
+    if (selectedPersonId) {
+      onAssign(parseInt(selectedPersonId));
+      setSelectedPersonId("");
+    }
+  }, [selectedPersonId, onAssign]);
+
+  // Filter people who are not assigned and those who are assigned
+  const unassignedPeople = useMemo(
+    () => people.filter((person) => !personPositionsMap.get(person.id)),
+    [people, personPositionsMap]
+  );
+
+  const assignedPeople = useMemo(
+    () => people.filter((person) => personPositionsMap.get(person.id)),
+    [people, personPositionsMap]
+  );
 
   return (
     <>
@@ -116,24 +168,18 @@ export function AssignPeopleDialog({
               </div>
               <Select
                 value={selectedPersonId}
-                onValueChange={setSelectedPersonId}
+                onValueChange={handleSelectChange}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select a person" />
                 </SelectTrigger>
                 <SelectContent>
-                  {people
-                    .filter(
-                      (person) => getPersonPositions(person.id).length === 0
-                    )
-                    .map((person) => (
-                      <SelectItem key={person.id} value={person.id.toString()}>
-                        {person.name}
-                      </SelectItem>
-                    ))}
-                  {people.some(
-                    (person) => getPersonPositions(person.id).length > 0
-                  ) && (
+                  {unassignedPeople.map((person) => (
+                    <SelectItem key={person.id} value={person.id.toString()}>
+                      {person.name}
+                    </SelectItem>
+                  ))}
+                  {assignedPeople.length > 0 && (
                     <>
                       <SelectItem
                         value="divider"
@@ -142,18 +188,14 @@ export function AssignPeopleDialog({
                       >
                         ───────Assigned────────
                       </SelectItem>
-                      {people
-                        .filter(
-                          (person) => getPersonPositions(person.id).length > 0
-                        )
-                        .map((person) => (
-                          <SelectItem
-                            key={person.id}
-                            value={person.id.toString()}
-                          >
-                            {person.name}
-                          </SelectItem>
-                        ))}
+                      {assignedPeople.map((person) => (
+                        <SelectItem
+                          key={person.id}
+                          value={person.id.toString()}
+                        >
+                          {person.name}
+                        </SelectItem>
+                      ))}
                     </>
                   )}
                 </SelectContent>
@@ -179,16 +221,7 @@ export function AssignPeopleDialog({
                 ))}
               </div>
             </div>
-            <Button
-              onClick={() => {
-                if (selectedPersonId) {
-                  onAssign(parseInt(selectedPersonId));
-                  setSelectedPersonId("");
-                }
-              }}
-            >
-              Assign
-            </Button>
+            <Button onClick={handleAssignClick}>Assign</Button>
           </div>
         </DialogContent>
       </Dialog>
@@ -203,8 +236,8 @@ export function AssignPeopleDialog({
               <Label htmlFor="name">Name</Label>
               <Input
                 id="name"
-                value={newPersonName}
-                onChange={(e) => setNewPersonName(e.target.value)}
+                value={newPerson?.name || ""}
+                onChange={handleNameChange}
                 placeholder="Enter person's name"
               />
             </div>

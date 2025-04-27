@@ -6,6 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useCallback } from "react";
 
 interface Person {
   id: number;
@@ -31,6 +32,13 @@ export function EditPersonDialog({
   selectedPerson,
   onSave,
 }: EditPersonDialogProps) {
+  const handleNameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onNameChange(e.target.value);
+    },
+    [onNameChange]
+  );
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -41,11 +49,11 @@ export function EditPersonDialog({
           <Input
             placeholder="Person Name"
             value={newName}
-            onChange={(e) => onNameChange(e.target.value)}
+            onChange={handleNameChange}
           />
           <Button onClick={onSave}>Save</Button>
         </div>
       </DialogContent>
     </Dialog>
   );
-} 
+}

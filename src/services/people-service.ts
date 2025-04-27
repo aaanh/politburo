@@ -2,6 +2,7 @@ import { db } from "../db/drizzle";
 import { people } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { positionAssignments } from "../db/schema";
+import { CreatePeople } from "@/types";
 
 export class PeopleService {
   #db: typeof db;
@@ -18,8 +19,11 @@ export class PeopleService {
     return PeopleService.instance;
   }
 
-  async create(name: string) {
-    const [person] = await this.#db.insert(people).values({ name }).returning();
+  async create(newPerson: CreatePeople) {
+    const [person] = await this.#db
+      .insert(people)
+      .values(newPerson)
+      .returning();
     return person;
   }
 
@@ -32,7 +36,9 @@ export class PeopleService {
   }
 
   async readAll() {
-    return await this.#db.select().from(people).orderBy(people.name);
+    const res = await this.#db.select().from(people).orderBy(people.name);
+
+    return res;
   }
 
   async update(id: number, name: string) {

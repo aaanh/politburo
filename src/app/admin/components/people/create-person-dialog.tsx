@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { UserPlus2Icon } from "lucide-react";
+import { useCallback } from "react";
 
 interface CreatePersonDialogProps {
   isOpen: boolean;
@@ -24,6 +25,13 @@ export function CreatePersonDialog({
   onNameChange,
   onCreate,
 }: CreatePersonDialogProps) {
+  const handleNameChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onNameChange(e.target.value);
+    },
+    [onNameChange]
+  );
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
@@ -39,7 +47,7 @@ export function CreatePersonDialog({
           <Input
             placeholder="Person Name"
             value={newName}
-            onChange={(e) => onNameChange(e.target.value)}
+            onChange={handleNameChange}
           />
           <Button onClick={onCreate}>Create</Button>
         </div>

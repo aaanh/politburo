@@ -6,8 +6,8 @@ export default function Footer() {
   const { t } = useI18n();
 
   return (
-    <div className="mx-auto my-4 p-4 container">
-      <footer className="bg-accent/25 p-4 border rounded-xl">
+    <div className="mx-auto container">
+      <footer className="bg-accent/25 p-2 border md:rounded-xl text-sm">
         {t("footer")}
       </footer>
     </div>

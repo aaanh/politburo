@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useCallback,
+} from "react";
 import { toast } from "sonner";
 import {
   createPerson,
@@ -8,6 +14,7 @@ import {
   updatePerson,
   deletePerson,
 } from "@/app/admin/actions";
+import { CreatePeople } from "@/types";
 
 interface Person {
   id: number;
@@ -49,9 +56,30 @@ export function PeopleProvider({
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null);
   const [newName, setNewName] = useState("");
 
-  const handleCreate = async () => {
+  // Memoize state setters
+  const handleSetNewName = useCallback((name: string) => {
+    setNewName(name);
+  }, []);
+
+  const handleSetIsCreateDialogOpen = useCallback((open: boolean) => {
+    setIsCreateDialogOpen(open);
+  }, []);
+
+  const handleSetIsEditDialogOpen = useCallback((open: boolean) => {
+    setIsEditDialogOpen(open);
+  }, []);
+
+  const handleSetSelectedPerson = useCallback((person: Person | null) => {
+    setSelectedPerson(person);
+  }, []);
+
+  const handleCreate = useCallback(async () => {
     if (newName.trim()) {
-      const result = await createPerson(newName.trim());
+      const personData: CreatePeople = {
+        name: newName.trim(),
+        profile: null,
+      };
+      const result = await createPerson(personData);
       if (result.success && result.data) {
         setPeople((prev) => [...prev, result.data]);
         setNewName("");
@@ -59,9 +87,9 @@ export function PeopleProvider({
         toast.success(`Created ${newName.trim()}`);
       }
     }
-  };
+  }, [newName]);
 
-  const handleEdit = async () => {
+  const handleEdit = useCallback(async () => {
     if (selectedPerson && newName.trim()) {
       const result = await updatePerson(selectedPerson.id, newName.trim());
       if (result.success && result.data) {
@@ -77,21 +105,24 @@ export function PeopleProvider({
         setIsEditDialogOpen(false);
       }
     }
-  };
+  }, [selectedPerson, newName]);
 
-  const handleDelete = async (person?: Person) => {
-    const personToDelete = person || selectedPerson;
-    if (personToDelete) {
-      const result = await deletePerson(personToDelete.id);
-      if (result.success) {
-        toast.success(`Deleted ${personToDelete.name}`);
-        setPeople((prev) => prev.filter((p) => p.id !== personToDelete.id));
-        setSelectedPerson(null);
-      } else {
-        toast.error("Failed to delete person");
+  const handleDelete = useCallback(
+    async (person?: Person) => {
+      const personToDelete = person || selectedPerson;
+      if (personToDelete) {
+        const result = await deletePerson(personToDelete.id);
+        if (result.success) {
+          toast.success(`Deleted ${personToDelete.name}`);
+          setPeople((prev) => prev.filter((p) => p.id !== personToDelete.id));
+          setSelectedPerson(null);
+        } else {
+          toast.error("Failed to delete person");
+        }
       }
-    }
-  };
+    },
+    [selectedPerson]
+  );
 
   return (
     <PeopleContext.Provider
@@ -102,10 +133,10 @@ export function PeopleProvider({
         isEditDialogOpen,
         selectedPerson,
         newName,
-        setNewName,
-        setIsCreateDialogOpen,
-        setIsEditDialogOpen,
-        setSelectedPerson,
+        setNewName: handleSetNewName,
+        setIsCreateDialogOpen: handleSetIsCreateDialogOpen,
+        setIsEditDialogOpen: handleSetIsEditDialogOpen,
+        setSelectedPerson: handleSetSelectedPerson,
         handleCreate,
         handleEdit,
         handleDelete,

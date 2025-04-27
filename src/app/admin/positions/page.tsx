@@ -7,15 +7,14 @@ import PositionManagement from "../components/position";
 export default async function PositionManagementPage({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: { locale?: string };
 }) {
   const result = await getAllPositions();
   const positions = result.success
     ? (result.data || []).map((pos, index) => ({ ...pos, order: index }))
     : [];
 
-  const resolvedLocale =
-    typeof (await params).locale === "string" ? (await params).locale : "en";
+  const resolvedLocale = params.locale || "en";
 
   return (
     <PositionsProvider initialPositions={positions}>

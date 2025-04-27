@@ -3,6 +3,7 @@
 import { PositionService } from "@/services/position-service";
 import { PeopleService } from "@/services/people-service";
 import { revalidatePath } from "next/cache";
+import { CreatePeople } from "@/types";
 
 const positionService = PositionService.getInstance();
 const peopleService = PeopleService.getInstance();
@@ -83,9 +84,9 @@ export async function addChildPosition(parentId: number, childId: number) {
   }
 }
 
-export async function createPerson(name: string) {
+export async function createPerson(newPerson: CreatePeople) {
   try {
-    const result = await peopleService.create(name);
+    const result = await peopleService.create(newPerson);
     revalidatePath("/admin/people");
     revalidatePath("/admin/positions");
     return { success: true, data: result };
