@@ -17,6 +17,8 @@ export interface Position {
   children?: Position[];
   order: number;
   assignedPeople?: { id: number; name: string }[];
+  isCreatingChild?: boolean;
+  parentId?: number;
 }
 
 interface PositionNodeProps {
@@ -103,6 +105,11 @@ export function PositionNode({
                         onClick={() => setIsAssignDialogOpen(true)}
                       >
                         Assign People
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => onEdit?.({ ...position, isCreatingChild: true, parentId: position.id })}
+                      >
+                        Add Subordinate
                       </DropdownMenuItem>
                       {onDelete && (
                         <DropdownMenuItem
