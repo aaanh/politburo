@@ -1,15 +1,18 @@
 import NavBarWrapper from "./components/nav-bar-wrapper";
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const resolvedLocale =
+    typeof (await params).locale === "string" ? (await params).locale : "en";
+
   return (
     <>
-      <NavBarWrapper locale={params.locale} i18nNamespaces={["default"]} />
+      <NavBarWrapper locale={resolvedLocale} i18nNamespaces={["default"]} />
       {children}
     </>
   );
