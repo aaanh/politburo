@@ -85,7 +85,12 @@ export default function PositionManagement() {
               onEdit={(pos) => {
                 setSelectedPosition(pos);
                 setNewTitle(pos.title);
-                setIsEditDialogOpen(true);
+                if (pos.isCreatingChild) {
+                  setSelectedParentId(pos.parentId?.toString() || "");
+                  setIsCreateDialogOpen(true);
+                } else {
+                  setIsEditDialogOpen(true);
+                }
               }}
               onDelete={handleDelete}
               onAssign={handleAssign}
