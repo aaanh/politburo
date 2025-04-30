@@ -29,6 +29,7 @@ export const config = {
     "/admin/positions",
     "/admin/people",
     "/admin",
+    "/about",
     "/((?!api|static|.*\\..*|_next).*)",
   ],
 };
