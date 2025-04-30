@@ -57,10 +57,11 @@ politburo/
 
 3. **Environment Setup**
    - Copy `.env.example` to `.env.local`
+     - The workspace currently has none
+     - [apps/frontend/.env.example](apps/frontend)
    - Configure required environment variables:
      - `DATABASE_URL`: Neon PostgreSQL connection string
      - `I18NEXUS_API_KEY`: i18nexus API key
-     - `VERCEL_OIDC_TOKEN`: Vercel authentication token
 
 4. **Development**
    ```bash
