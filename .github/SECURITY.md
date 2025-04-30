@@ -1,17 +1,11 @@
 # Security Policy
 
-## Supported Versions
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 1.0.x   | :white_check_mark: |
-
 ## Reporting a Vulnerability
 
 We take security seriously. If you discover a security vulnerability within PolitBuro, please follow these steps:
 
 1. **Do Not** disclose the vulnerability publicly
-2. Send a detailed report to [project maintainer's email]
+2. Send a detailed report to [the maintainer's email: iam@hoanganh.dev](mailto:iam@hoanganh.dev)
    - Describe the vulnerability
    - Steps to reproduce
    - Potential impact
