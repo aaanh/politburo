@@ -42,6 +42,18 @@ politburo/
 └── ...configuration files
 ```
 
+## Before You Start
+
+- Install
+  - node >= 20 + npm
+  - pnpm with `npm i -g pnpm`
+- Start a database project on Neon or Supabase.
+  
+> [!NOTE]
+> Though the project uses Neon as its database, Supabase should be compatible bug-for-bug for the basic feature set that we need.
+
+- Obtain the connection string for the DATABASE_URL
+
 ## Getting Started
 
 1. **Clone the repository**
